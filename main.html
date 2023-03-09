@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- <h1>tag[attribute=value] 사용을 위한 생성 툴</h1> -->
+    <h1>1. tag[attribute=value] 생성</h1>
+    <div style="display: flex;">
+        <div style="border: 1px solid; padding: 10px; flex: 1;" id="onLineHtml">
+            <!-- <fieldset> -->
+            <h3>한줄 html</h3>
+            <input style="width: 800px;" type="text" id="inputText" placeholder="html tag 입력를 입력 해주세요">
+            <!-- <a href="http://sports.news.naver.com/" class="link_direct" data-clk="sports">스포츠</a> -->
+            <div class="tag-input-div1">
+                <br>
+                <input style="width: 500px;" type="text" id="tags-input1"
+                    placeholder="2개 이상의 태그를 검색 해야 할때, 검색할 tag를 순서대로 입력 해주세요 ex) a,img "> <br>
+            </div>
+            <p>추출 할 타입 선택</p>
+            <div>
+                <input type="radio" id="val1" name="arg1" value="val1" checked onclick="enableInput('1')">
+                <label style="display: inline-block; text-align:left; width: 75px;" for="val-input">value : </label>
+                <input type="text" id="val1-input">
+            </div>
+            <div>
+                <input type="radio" id="att1" name="arg1" value="att1" onclick="enableInput('1')">
+                <label style="display: inline-block; text-align:left; width: 75px;" for="attr-input">attribute :
+                </label>
+                <input type="text" id="att1-input" disabled>
+            </div>
+            <br>
+            <button id="result1" onclick="getResult('1')">Run</button>
+            <button id="clear1" onclick="resultClear('1')">Clear</button>
+            <span id="result1">
+                <p>결과 : </p>
+                <p id="resultText1" class="resultText1"></p>
+            </span>
+            <!-- </fieldset> -->
+        </div>
+        <br>
+        <div style="border: 1px solid; padding: 10px; flex: 1;" id="fullHthml">
+            <!-- <fieldset> -->
+            <h3>전체 html</h3>
+            <textarea id="fullText" cols="140" rows="10" placeholder="추출 할 전체 html을 입력 해주세요"></textarea>
+            <div class="tag-input-div2">
+                <br>
+                <input style="width: 500px;" type="text" id="tags-input2"
+                    placeholder="검색할 tag를 순서대로 입력 해주세요 ex) a,img "> <br>
+            </div>
+            <p>추출 할 타입 선택</p>
+            <div>
+                <input type="radio" id="val2" name="arg2" value="val2" checked onclick="enableInput('2')">
+                <label style="display: inline-block; text-align:left; width: 75px;" for="val-input">value : </label>
+                <input type="text" id="val2-input">
+            </div>
+            <div>
+                <input type="radio" id="att2" name="arg2" value="att2" onclick="enableInput('2')">
+                <label style="display: inline-block; text-align:left; width: 75px;" for="attr-input">attribute :
+                </label>
+                <input type="text" id="att2-input" disabled>
+            </div>
+            <br>
+            <button id="result2" onclick="getResult('2')">Run</button>
+            <button id="clear2" onclick="resultClear('2')">Clear</button>
+            <span id="result2">
+                <p>결과 : </p>
+                <div id="resultText2"></div>
+            </span>
+            <!-- </fieldset> -->
+        </div>
+    </div>
+    <h1>2. Full xpath를 css Path로 변환</h1>
+    <div style="display: flex;">
+        <div style="width: 850px; border: 1px solid; padding: 10px; flex: 1;" id="xpath-to-css-path">
+            <!-- <fieldset> -->
+            <h3>Full Xpath to CSS path</h3>
+            <input style="width: 800px;" type="text" id="xpath" placeholder="Xpath를 입력 해주세요">
+            <br><br>
+            <button id="result3" onclick="xpathToCssPath('3')">Run</button>
+            <button id="clear3" onclick="resultClear('3')">Clear</button>
+            <span>
+                <p>결과 : </p>
+                <div id="resultText3"></div>
+            </span>
+            <!-- </fieldset> -->
+        </div>
+    </div>
+    <!-- <h1>3. iframe 경로 추출</h1>
+    <div style="display: flex;">
+        <div style="width: 850px; border: 1px solid; padding: 10px; flex: 1;" id="iframe-convert-div">
+            <h3>iframe 경로 추출</h3>
+            <textarea id="iframe-convert" cols="140" rows="10" placeholder="추출 할 전체 html 입력"></textarea>
+            <br>
+            <button>Run</button>
+            <button onclick="resultClear('4')">Clear</button>
+            <span>
+                <p>결과 : </p>
+                <div id="resultText4"></div>
+            </span>
+        </div>
+    </div> -->
+    <div>
+        <h1>iframe test</h1>
+        <div>
+            <iframe id="iframA" src="./iframe1.html" width="700" height="150"></iframe>
+            <iframe id="iframB" src="./iframe4.html" width="700" height="150"></iframe>
+        </div>
+    </div>
+</body>
+<script>
+    function enableInput(num) {
+        let id = ['att', 'val']
+        if (document.getElementById(id[0] + num).checked == true) {
+            document.getElementById(id[0] + num + '-input').disabled = false
+            document.getElementById(id[1] + num + '-input').disabled = true
+            document.getElementById(id[1] + num + '-input').value = ''
+        } else if (document.getElementById(id[1] + num).checked == true) {
+            document.getElementById(id[1] + num + '-input').disabled = false
+            document.getElementById(id[0] + num + '-input').disabled = true
+            document.getElementById(id[0] + num + '-input').value = ''
+        }
+    }
+
+    function resultClear(num) {
+        let resultDoc = document.getElementById('resultText' + num)
+        if (resultDoc != null) {
+            resultDoc.innerHTML = ''
+        }
+    }
+
+    function testFnc() {
+
+    }
+
+
+    function getAllTagIdsInIframes() {
+        let iframeStack = [{
+            iframe: null,
+            document: document,
+            depth: 0,
+            ids: []
+        }];
+        let idArray = [
+            []
+        ];
+
+        while (iframeStack.length > 0) {
+            let currentFrame = iframeStack.pop();
+            let iframeDocument = currentFrame.iframe ? currentFrame.iframe.contentDocument || currentFrame.iframe
+                .contentWindow.document : currentFrame.document;
+
+            let subArray = [];
+            // let elements = iframeDocument.getElementsByTagName('*');
+            let elements = iframeDocument.getElementsByTagName('iframe');
+            for (let i = 0; i < elements.length; i++) {
+                let element = elements[i];
+                let id = element.getAttribute('id');
+                if (id) {
+                    subArray.push('#' + id);
+                }
+            }
+
+            idArray[currentFrame.depth] = currentFrame.ids.concat(subArray);
+
+            let childFrames = iframeDocument.getElementsByTagName('iframe');
+            for (let i = 0; i < childFrames.length; i++) {
+                iframeStack.push({
+                    iframe: childFrames[i],
+                    document: null,
+                    depth: currentFrame.depth + 1,
+                    ids: subArray
+                });
+            }
+        }
+        for (let i = 1; i < idArray.length; i++) {
+            idArray[i] = idArray[i].filter(x => !idArray[i - 1].includes(x))
+        }
+        idArray = idArray.filter(subArr => subArr.length > 0);
+        return idArray;
+    }
+
+
+    const combinations = [];
+
+    function generateCombinations(index, currentCombination) { // 기본적으로는0,[]를 인자로...
+        result = getAllTagIdsInIframes()
+        if (index === result.length) {
+            // console.log('1')
+            currentCombination = currentCombination.join(' | ')
+            combinations.push(currentCombination);
+            return;
+        }
+
+        for (let i = 0; i < result[index].length; i++) {
+            // console.log('2')
+            const newCombination = currentCombination.concat(result[index][i]);
+            generateCombinations(index + 1, newCombination);
+        }
+
+        let arr = [];
+
+
+        combinations.forEach((item) => {
+            if (Array.isArray(item)) {
+                item = removeDuplicates(item);
+            }
+
+            if (!arr.some((x) => JSON.stringify(x) === JSON.stringify(item))) {
+                arr.push(item);
+            }
+        });
+
+        return arr
+
+        // return combinations
+    }
+
+    function removeDuplicates(arr) {
+        let result = [];
+
+
+        arr.forEach((item) => {
+            if (Array.isArray(item)) {
+                item = removeDuplicates(item);
+            }
+
+            if (!result.some((x) => JSON.stringify(x) === JSON.stringify(item))) {
+                result.push(item);
+            }
+        });
+
+        return result;
+    }
+
+    function addTagButton(num) {
+        let resultTagName = document.getElementsByClassName('tag-input-div')
+        let new_inputTag = document.createElement('input');
+        let br_tag = document.createElement('br');
+        new_inputTag.setAttribute('id', 'tag-input' + num);
+        new_inputTag.setAttribute('placeholder', '검색할 tag 입력')
+        // new_inputTag.innerHTML = '<br>';
+        resultTagName.appendChild(new_inputTag);
+        resultTagName.appendChild(br_tag);
+    }
+
+    function inputToArrConvert(num) {
+        let inputText = document.getElementById('tags-input' + num).value
+        inputText = inputText.split(',')
+        resultInputtext = inputText.filter(n => n)
+        return resultInputtext
+    }
+
+    function getResult(num) {
+        resultClear(num)
+        let id = ['att', 'val']
+        let attrNameArr = []
+        let text = document.getElementById('inputText').value // 한줄짜리 html tag
+        let fullText = document.getElementById('fullText').value // html 전체
+        let parser = new DOMParser();
+        let inputValue = ''
+        let attrName = ''
+        let textToHtml = ''
+        let inputTagName = ''
+        let tagName = ''
+        let resultTag = ''
+        let tagList = inputToArrConvert(num)
+        // ['a[data-clk="sports"', []]
+        if (num == '1') {
+            textToHtml = parser.parseFromString(text, 'text/html')
+
+            if (document.getElementById('tags-input' + num).value == '') {
+                tagName = textToHtml.documentElement.getElementsByTagName('body')[0]['childNodes'][0].tagName
+                    .toLowerCase()
+                // console.log(tagName)
+            } else {
+                tagName = tagList[tagList.length - 1]
+                for (let i = 0; i < tagList.length - 1; i++) {
+                    resultTag = resultTag + tagList[i] + ' > '
+                }
+            }
+
+            if (document.getElementById(id[0] + num).checked == true) {
+                // console.log('어트리어트리')
+                inputValue = document.getElementById(id[0] + num + '-input').value
+                attrName = textToHtml.documentElement.getElementsByTagName(tagName)[0].getAttribute(inputValue)
+
+                let result = resultTag + tagName + '[' + inputValue + '="' + attrName + '"]'
+                let resultTagName = document.getElementById('resultText' + num)
+                resultTagName.innerHTML = result
+                // document.getElementsByTagName('fieldset')[0].appendChild(resultTagName)
+
+            } else if (document.getElementById(id[1] + num).checked == true) {
+                // console.log('벨류벨류')
+                inputValue = document.getElementById(id[1] + num + '-input').value
+                attrs = textToHtml.documentElement.getElementsByTagName(tagName)[0]['attributes']
+                for (var i = 0; i < attrs.length; i++) {
+                    if (attrs[i]['nodeValue'] == inputValue) {
+                        attrName = attrs[i]['nodeName']
+                        break
+                    }
+                }
+
+                let result = resultTag + tagName + '[' + attrName + '="' + inputValue + '"]'.toString()
+                let resultTagName = document.getElementById('resultText' + num)
+                // resultTagName.textContent = result
+                resultTagName.innerHTML = result
+                // console.log(resultTagName)
+                // document.getElementsByTagName('fieldset')[0].appendChild(resultTagName)
+                // console.log(resultTagName.textContent)
+                // document.body.getElementsByClassName('resultText'+num).appendChild(resultTagName)
+            }
+
+        } else if (num == '2') {
+            textToHtml = parser.parseFromString(fullText, 'text/html')
+            if (tagList.length == 1) {
+                inputTagName = tagList[0]
+            } else if (tagList.length > 1) {
+                inputTagName = tagList[tagList.length - 1]
+                for (let i = 0; i < tagList.length - 1; i++) {
+                    resultTag = resultTag + tagList[i] + ' > '
+                }
+            }
+            // inputTagName = document.getElementById('tag-input'+num).value
+            if (document.getElementById(id[0] + num).checked == true) {
+                inputValue = document.getElementById(id[0] + num + '-input').value
+                attrArr = textToHtml.documentElement.getElementsByTagName(inputTagName)
+                for (let i = 0; i < attrArr.length; i++) {
+                    attrs = attrArr[i]['attributes']
+                    for (let j = 0; j < attrs.length; j++) {
+                        if (attrs[j]['nodeName'] == inputValue) {
+                            attrName = attrs[j]['nodeValue']
+                            let result = resultTag + inputTagName + '[' + inputValue + '="' + attrName + '"]'
+                            attrNameArr.push(result)
+                        }
+                    }
+                }
+                let result1 = [...new Set(attrNameArr)];
+                let resultTagName = document.getElementById('resultText' + num)
+                for (let i = 0; i < result1.length; i++) {
+                    let new_pTag = document.createElement('p');
+                    new_pTag.setAttribute('class', 'pTag');
+                    new_pTag.innerHTML = result1[i];
+                    resultTagName.appendChild(new_pTag);
+                }
+            } else if (document.getElementById(id[1] + num).checked == true) {
+                inputValue = document.getElementById(id[1] + num + '-input').value
+                attrArr = textToHtml.documentElement.getElementsByTagName(inputTagName)
+                for (let i = 0; i < attrArr.length; i++) {
+                    attrs = attrArr[i]['attributes']
+                    for (let j = 0; j < attrs.length; j++) {
+                        if (attrs[j]['nodeValue'] == inputValue) {
+                            // if(attrs[j]['nodeValue'].inclueds(inputValue)){
+                            attrName = attrs[j]['nodeName']
+                            let result = resultTag + inputTagName + '[' + attrName + '="' + inputValue + '"]'
+                            attrNameArr.push(result)
+                        }
+                    }
+                    // console.log(attrName)
+                }
+                let result2 = [...new Set(attrNameArr)];
+                let resultTagName = document.getElementById('resultText' + num)
+                for (let i = 0; i < result2.length; i++) {
+                    let new_pTag = document.createElement('p');
+                    new_pTag.setAttribute('class', 'pTag');
+                    new_pTag.innerHTML = result2[i];
+                    resultTagName.appendChild(new_pTag);
+                }
+            }
+        }
+
+    }
+
+    function xpathToCssPath(num) {
+        xpath = document.getElementById('xpath').value
+        // console.log(xpath)
+        if (xpath[0] == '/') {
+            xpath = xpath.replace(xpath[0], '')
+        }
+        xpath = xpath.replaceAll('/', ' > ').replaceAll('[', ':nth-of-type(').replaceAll(']', ')')
+        // console.log(xpath)
+
+        let convertResult = document.getElementById('resultText' + num)
+        convertResult.innerHTML = xpath
+        // document.getElementsByTagName('fieldset')[2].appendChild(convertResult)
+
+    }
+</script>
+
+</html>
